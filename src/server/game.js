@@ -12,11 +12,8 @@ class Game {
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
 
-    this.addBot("joshua");
-    this.addBot("dan81238");
-    this.addBot("xkiller");
-    this.addBot("pumperpro");
-    this.addBot("pumptop");
+    this.addBot("Bot_1");
+    this.addBot("Bot_2");
   }
 
   addPlayer(socket, username) {
@@ -67,6 +64,9 @@ class Game {
       } else if (Math.random() < 0.03) {
         bot.fireCooldown = 0;
       }
+      if (bot.score > 1500) {
+        bot.score = 0;
+      }
     });
 
     const destroyedBullets = applyCollisions([...Object.values(this.players), ...Object.values(this.bots)], this.bullets);
@@ -87,6 +87,7 @@ class Game {
         bot.hp = Constants.PLAYER_MAX_HP;
         bot.x = Constants.MAP_SIZE * Math.random();
         bot.y = Constants.MAP_SIZE * Math.random();
+        bot.score = 0; // Сбрасываем очки при смерти бота
       }
     });
 
@@ -94,8 +95,10 @@ class Game {
       const leaderboard = this.getLeaderboard();
       Object.entries(this.sockets).forEach(([playerID, socket]) => {
         const player = this.players[playerID];
-        const update = this.createUpdate(player, leaderboard);
-        socket.emit(Constants.MSG_TYPES.GAME_UPDATE, update);
+        if (player) { // Добавлена проверка на существование игрока
+          const update = this.createUpdate(player, leaderboard);
+          socket.emit(Constants.MSG_TYPES.GAME_UPDATE, update);
+        }
       });
       this.shouldSendUpdate = false;
     } else {
@@ -122,6 +125,7 @@ class Game {
       others: nearbyPlayers.map(p => p.serializeForUpdate()),
       bullets: nearbyBullets.map(b => b.serializeForUpdate()),
       leaderboard,
+      myScore: Math.round(player.score),
     };
   }
 }
