@@ -12,10 +12,12 @@ class Game {
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
 
-    this.addBot("jeniffer");
-    this.addBot("ss");
+    this.addBot("johnyboy");
+    this.addBot("sadsa");
+    this.addBot("xmll");
+    this.addBot("рускиеесть?");
     this.addBot("x.com/pumppvp");
-    this.addBot("DDx");
+    this.addBot("sssah");
   }
 
   addPlayer(socket, username) {
@@ -79,7 +81,10 @@ class Game {
 
     Object.entries(this.players).forEach(([playerID, player]) => {
       if (player.hp <= 0) {
-        this.sockets[playerID].emit(Constants.MSG_TYPES.GAME_OVER);
+        // Отправляем GAME_OVER с финальным счетом игрока
+        this.sockets[playerID].emit(Constants.MSG_TYPES.GAME_OVER, {
+          score: Math.round(player.score),
+        });
         this.removePlayer(this.sockets[playerID]);
       }
     });
@@ -89,7 +94,7 @@ class Game {
         bot.hp = Constants.PLAYER_MAX_HP;
         bot.x = Constants.MAP_SIZE * Math.random();
         bot.y = Constants.MAP_SIZE * Math.random();
-        bot.score = 0; // Сбрасываем очки при смерти бота
+        bot.score = 0;
       }
     });
 
@@ -97,10 +102,8 @@ class Game {
       const leaderboard = this.getLeaderboard();
       Object.entries(this.sockets).forEach(([playerID, socket]) => {
         const player = this.players[playerID];
-        if (player) { // Добавлена проверка на существование игрока
-          const update = this.createUpdate(player, leaderboard);
-          socket.emit(Constants.MSG_TYPES.GAME_UPDATE, update);
-        }
+        const update = this.createUpdate(player, leaderboard);
+        socket.emit(Constants.MSG_TYPES.GAME_UPDATE, update);
       });
       this.shouldSendUpdate = false;
     } else {
