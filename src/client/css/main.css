@@ -20,11 +20,13 @@ iframe {
   position: absolute;
   bottom: 10px;
   left: 10px;
-  width: 800px; /* Фиксированная ширина контейнера */
+  width: 100%; /* Ширина 100% от родительского элемента */
+  max-width: 800px; /* Максимальная ширина 800px */
   background: rgba(0, 0, 0, 0.7);
   border: 1px solid #ccc;
   padding: 10px;
   color: white;
+  box-sizing: border-box; /* Учитываем padding и border в ширине */
 }
 
 #chat-box {
@@ -50,6 +52,43 @@ iframe {
   border: 1px solid #ccc;
   padding: 10px;
   color: white;
+}
+
+/* Медиазапросы для мобильных устройств */
+@media (max-width: 768px) {
+  #chat-container {
+    width: 100%; /* На маленьких экранах 100% ширины */
+    bottom: 0; /* На мобильных устройствах помещаем чат в самый низ */
+  }
+
+  #chat-input {
+    width: calc(100% - 60px); /* Оставляем место для кнопки отправки */
+    margin-right: 10px;
+  }
+
+  #send-chat-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  #chat-container {
+    padding: 5px;
+  }
+
+  #chat-box {
+    height: 150px; /* Меньше высоты на маленьких экранах */
+  }
+
+  #chat-input {
+    padding: 5px;
+  }
+
+  #send-chat-button {
+    padding: 5px 10px;
+  }
 }
 
 hr {
