@@ -6,7 +6,7 @@ html, body {
 }
 
 iframe {
-  position: fixed; /* чтобы iframe всегда оставался на месте */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -14,31 +14,31 @@ iframe {
   border: none;
   z-index: -1;
 }
-/* Стили для чата */
+
 /* Стили для чата */
 #chat-container {
   position: absolute;
   bottom: 10px;
   left: 10px;
-  width: 100%; /* Ширина 100% от родительского элемента */
-  max-width: 800px; /* Максимальная ширина 800px */
+  width: 100%;
+  max-width: 800px;
   background: rgba(0, 0, 0, 0.7);
   border: 1px solid #ccc;
   padding: 10px;
   color: white;
-  box-sizing: border-box; /* Учитываем padding и border в ширине */
+  box-sizing: border-box;
 }
 
 #chat-box {
   border: 1px solid #444;
   margin-bottom: 10px;
-  height: 200px; /* Пример высоты для чата */
-  overflow-y: auto; /* Добавляем прокрутку, если сообщений много */
+  height: 200px;
+  overflow-y: auto;
 }
 
 #chat-input {
-  width: 100%; /* Занимает 100% ширины родительского контейнера */
-  box-sizing: border-box; /* Учитывает padding и border в ширине */
+  width: 100%;
+  box-sizing: border-box;
   margin-right: 10px;
   background: rgba(0, 0, 0, 0.7);
   border: 1px solid #ccc;
@@ -54,46 +54,89 @@ iframe {
   color: white;
 }
 
-/* Медиазапросы для мобильных устройств */
-@media (max-width: 768px) {
-  #chat-container {
-    width: 100%; /* На маленьких экранах 100% ширины */
-    bottom: 0; /* На мобильных устройствах помещаем чат в самый низ */
-  }
-
-  #chat-input {
-    width: calc(100% - 60px); /* Оставляем место для кнопки отправки */
-    margin-right: 10px;
-  }
-
-  #send-chat-button {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-  }
+/* Стили для главного меню */
+#play-menu {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  padding: 20px 30px;
+  background: rgba(0, 0, 0, 0.7); /* Тёмный фон как у чата */
+  border: 1px solid #ccc; /* Граница как у чата */
+  color: white; /* Белый текст */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 5px;
+  text-align: center;
+  box-sizing: border-box;
 }
 
-@media (max-width: 480px) {
-  #chat-container {
-    padding: 5px;
-  }
-
-  #chat-box {
-    height: 150px; /* Меньше высоты на маленьких экранах */
-  }
-
-  #chat-input {
-    padding: 5px;
-  }
-
-  #send-chat-button {
-    padding: 5px 10px;
-  }
+#play-menu p {
+  margin-bottom: 0;
+  color: white; /* Убедимся, что текст белый */
 }
 
+#play-menu input {
+  font-size: 18px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #ccc; /* Серая линия как у чата */
+  margin-bottom: 5px;
+  padding: 3px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7); /* Тёмный фон для инпута */
+  color: white; /* Белый текст в инпуте */
+}
+
+#play-menu input:hover {
+  outline: none;
+}
+
+#play-menu button {
+  font-size: 18px;
+  outline: none;
+  border: 1px solid #ccc; /* Граница как у чата */
+  color: white; /* Белый текст */
+  background: rgba(0, 0, 0, 0.7); /* Тёмный фон */
+  padding: 5px 20px;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+#play-menu button:hover {
+  background-color: rgba(50, 50, 50, 0.7); /* Лёгкое осветление при наведении */
+}
+
+/* Стили для лидерборда */
+#leaderboard {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7); /* Тёмный фон как у чата */
+  padding: 10px;
+  border: 1px solid #ccc; /* Граница как у чата */
+  border-radius: 5px;
+  color: white; /* Белый текст */
+  box-sizing: border-box;
+}
+
+#leaderboard th {
+  text-align: center;
+  padding: 2px 5px;
+  color: white; /* Белый текст для заголовков */
+}
+
+#leaderboard td {
+  text-align: center;
+  padding: 2px 5px;
+  color: white; /* Белый текст для ячеек */
+}
+
+/* Общие стили */
 hr {
   border: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Светлая линия для тёмного фона */
   margin: 1rem 0;
   width: 100%;
 }
@@ -102,7 +145,7 @@ button {
   font-size: 18px;
   outline: none;
   border: none;
-  color: black;
+  color: white; /* Белый текст по умолчанию */
   background-color: transparent;
   padding: 5px 20px;
   border-radius: 3px;
@@ -110,7 +153,7 @@ button {
 }
 
 button:hover {
-  background-color: rgb(230, 230, 230);
+  background-color: rgba(50, 50, 50, 0.7); /* Лёгкое осветление при наведении */
 }
 
 button:focus {
@@ -127,57 +170,7 @@ button:focus {
   z-index: 1;
 }
 
-#play-menu {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translateY(-50%) translateX(-50%);
-  padding: 20px 30px;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 5px;
-  text-align: center;
-}
-
-#play-menu p {
-  margin-bottom: 0;
-}
-
-#play-menu input {
-  font-size: 18px;
-  outline: none;
-  border: none;
-  border-bottom: 1px solid black;
-  margin-bottom: 5px;
-  padding: 3px;
-  text-align: center;
-}
-
-#play-menu input:hover {
-  outline: none;
-}
-
-#leaderboard {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background-color: rgba(255, 255, 255, 0.5);
-  padding: 10px;
-  border-radius: 5px;
-}
-
-#leaderboard th {
-  text-align: center;
-  padding: 2px 5px;
-}
-
-#leaderboard td {
-  text-align: center;
-  padding: 2px 5px;
-}
-
+/* Стили для модального окна отключения */
 #disconnect-modal {
   position: fixed;
   top: 0;
@@ -193,12 +186,61 @@ button:focus {
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
   padding: 15px 20px;
-  background-color: white;
+  background: rgba(0, 0, 0, 0.7); /* Тёмный фон как у чата */
+  border: 1px solid #ccc; /* Граница как у чата */
   border-radius: 5px;
   text-align: center;
+  color: white; /* Белый текст */
 }
 
-@media screen and (max-width: 640px) {
+/* Медиазапросы для мобильных устройств */
+@media (max-width: 768px) {
+  #chat-container {
+    width: 100%;
+    bottom: 0;
+  }
+
+  #chat-input {
+    width: calc(100% - 60px);
+    margin-right: 10px;
+  }
+
+  #send-chat-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  #play-menu {
+    width: 90%;
+    max-width: 400px;
+  }
+
+  #leaderboard {
+    width: 90%;
+    max-width: 300px;
+    right: 5px;
+    top: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  #chat-container {
+    padding: 5px;
+  }
+
+  #chat-box {
+    height: 150px;
+  }
+
+  #chat-input {
+    padding: 5px;
+  }
+
+  #send-chat-button {
+    padding: 5px 10px;
+  }
+
   h1 {
     font-size: 2rem;
   }
@@ -212,6 +254,14 @@ button:focus {
     min-width: 280px;
   }
 
+  #play-menu input {
+    font-size: 16px;
+  }
+
+  #play-menu button {
+    font-size: 16px;
+  }
+
   #disconnect-modal > div {
     padding: 10px;
     min-width: 280px;
@@ -223,9 +273,6 @@ button:focus {
 
   #leaderboard td {
     padding: 0 3px;
-  }
-
-  #leaderboard table {
     font-size: 14px;
   }
 }
