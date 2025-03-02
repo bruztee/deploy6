@@ -62,7 +62,7 @@ function renderPlayer(me, player) {
   const canvasY = canvas.height / 2 + y - me.y;
 
   // Лог для отладки
-  console.log(`Rendering player: ${player.id}, username: ${username}`);
+  //console.log(`Rendering player: ${player.id}, username: ${username}`);
 
   // Draw ship
   context.save();

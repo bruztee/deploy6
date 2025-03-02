@@ -1,9 +1,5 @@
-// Learn more about this file at:
-// https://victorzhou.com/blog/build-an-io-game-part-1/#7-client-state
 import { updateLeaderboard } from './leaderboard';
 
-// The "current" state will always be RENDER_DELAY ms behind server time.
-// This makes gameplay smoother and lag less noticeable.
 const RENDER_DELAY = 100;
 
 const gameUpdates = [];
@@ -22,9 +18,8 @@ export function processGameUpdate(update) {
   }
   gameUpdates.push(update);
 
-  updateLeaderboard(update.leaderboard);
+  updateLeaderboard(update); // Передаем весь объект update
 
-  // Keep only one game update before the current server time
   const base = getBaseUpdate();
   if (base > 0) {
     gameUpdates.splice(0, base);
@@ -63,7 +58,8 @@ export function getCurrentState() {
       me: interpolateObject(baseUpdate.me, next.me, ratio),
       others: interpolateObjectArray(baseUpdate.others, next.others, ratio),
       bullets: interpolateObjectArray(baseUpdate.bullets, next.bullets, ratio),
-      leaderboard: baseUpdate.leaderboard, // Лидерборд не интерполируем
+      leaderboard: baseUpdate.leaderboard,
+      myScore: baseUpdate.myScore + (next.myScore - baseUpdate.myScore) * ratio, // Интерполируем твой счет
     };
   }
 }
@@ -78,7 +74,7 @@ function interpolateObject(object1, object2, ratio) {
     if (key === 'direction') {
       interpolated[key] = interpolateDirection(object1[key], object2[key], ratio);
     } else if (key === 'username' || key === 'hp' || typeof object1[key] !== 'number') {
-      interpolated[key] = object1[key]; // Не интерполируем строки и нечисловые значения
+      interpolated[key] = object1[key];
     } else {
       interpolated[key] = object1[key] + (object2[key] - object1[key]) * ratio;
     }
