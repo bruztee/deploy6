@@ -52,11 +52,17 @@ function renderBackground(x, y) {
   // Очищаем canvas, делая его полностью прозрачным
   context.clearRect(0, 0, canvas.width, canvas.height);
 }
+
 // Renders a ship at the given coordinates
+// ... (без изменений в начале файла)
+
 function renderPlayer(me, player) {
-  const { x, y, direction } = player;
+  const { x, y, direction, hp, username } = player;
   const canvasX = canvas.width / 2 + x - me.x;
   const canvasY = canvas.height / 2 + y - me.y;
+
+  // Лог для отладки
+  console.log(`Rendering player: ${player.id}, username: ${username}`);
 
   // Draw ship
   context.save();
@@ -81,12 +87,21 @@ function renderPlayer(me, player) {
   );
   context.fillStyle = 'red';
   context.fillRect(
-    canvasX - PLAYER_RADIUS + PLAYER_RADIUS * 2 * player.hp / PLAYER_MAX_HP,
+    canvasX - PLAYER_RADIUS + PLAYER_RADIUS * 2 * hp / PLAYER_MAX_HP,
     canvasY + PLAYER_RADIUS + 8,
-    PLAYER_RADIUS * 2 * (1 - player.hp / PLAYER_MAX_HP),
+    PLAYER_RADIUS * 2 * (1 - hp / PLAYER_MAX_HP),
     2,
   );
+
+  // Draw username above the player
+  context.font = '12px Arial';
+  context.fillStyle = 'white';
+  context.textAlign = 'center';
+  const displayName = username || 'Unnamed'; // Защита от undefined
+  context.fillText(displayName, canvasX, canvasY - PLAYER_RADIUS - 5);
 }
+
+// ... (без изменений в остальном файле)
 
 function renderBullet(me, bullet) {
   const { x, y, direction } = bullet;

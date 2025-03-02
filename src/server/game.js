@@ -7,18 +7,31 @@ class Game {
     this.sockets = {};
     this.players = {};
     this.bullets = [];
+    this.bots = {};
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
+
+    this.addBot("joshua");
+    this.addBot("dan81238");
+    this.addBot("xkiller");
+    this.addBot("pumperpro");
+    this.addBot("pumptop");
   }
 
   addPlayer(socket, username) {
     this.sockets[socket.id] = socket;
-
-    // Generate a position to start this player at.
     const x = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
     const y = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
     this.players[socket.id] = new Player(socket.id, username, x, y);
+  }
+
+  addBot(botName) {
+    const botID = `bot_${Object.keys(this.bots).length}`;
+    const x = Constants.MAP_SIZE * Math.random();
+    const y = Constants.MAP_SIZE * Math.random();
+    const bot = new Player(botID, botName, x, y);
+    this.bots[botID] = bot;
   }
 
   removePlayer(socket) {
@@ -33,56 +46,56 @@ class Game {
   }
 
   update() {
-    // Calculate time elapsed
     const now = Date.now();
     const dt = (now - this.lastUpdateTime) / 1000;
     this.lastUpdateTime = now;
 
-    // Update each bullet
-    const bulletsToRemove = [];
-    this.bullets.forEach(bullet => {
-      if (bullet.update(dt)) {
-        // Destroy this bullet
-        bulletsToRemove.push(bullet);
-      }
-    });
-    this.bullets = this.bullets.filter(bullet => !bulletsToRemove.includes(bullet));
+    this.bullets = this.bullets.filter(bullet => !bullet.update(dt));
 
-    // Update each player
-    Object.keys(this.sockets).forEach(playerID => {
-      const player = this.players[playerID];
+    Object.values(this.players).forEach(player => {
       const newBullet = player.update(dt);
+      if (newBullet) this.bullets.push(newBullet);
+    });
+
+    Object.values(this.bots).forEach(bot => {
+      if (Math.random() < 0.02) {
+        bot.setDirection(Math.random() * Math.PI * 2);
+      }
+      const newBullet = bot.update(dt);
       if (newBullet) {
         this.bullets.push(newBullet);
+      } else if (Math.random() < 0.03) {
+        bot.fireCooldown = 0;
       }
     });
 
-    // Apply collisions, give players score for hitting bullets
-    const destroyedBullets = applyCollisions(Object.values(this.players), this.bullets);
+    const destroyedBullets = applyCollisions([...Object.values(this.players), ...Object.values(this.bots)], this.bullets);
     destroyedBullets.forEach(b => {
-      if (this.players[b.parentID]) {
-        this.players[b.parentID].onDealtDamage();
-      }
+      if (this.players[b.parentID]) this.players[b.parentID].onDealtDamage();
+      else if (this.bots[b.parentID]) this.bots[b.parentID].onDealtDamage();
     });
-    this.bullets = this.bullets.filter(bullet => !destroyedBullets.includes(bullet));
 
-    // Check if any players are dead
-    Object.keys(this.sockets).forEach(playerID => {
-      const socket = this.sockets[playerID];
-      const player = this.players[playerID];
+    Object.entries(this.players).forEach(([playerID, player]) => {
       if (player.hp <= 0) {
-        socket.emit(Constants.MSG_TYPES.GAME_OVER);
-        this.removePlayer(socket);
+        this.sockets[playerID].emit(Constants.MSG_TYPES.GAME_OVER);
+        this.removePlayer(this.sockets[playerID]);
       }
     });
 
-    // Send a game update to each player every other time
+    Object.entries(this.bots).forEach(([botID, bot]) => {
+      if (bot.hp <= 0) {
+        bot.hp = Constants.PLAYER_MAX_HP;
+        bot.x = Constants.MAP_SIZE * Math.random();
+        bot.y = Constants.MAP_SIZE * Math.random();
+      }
+    });
+
     if (this.shouldSendUpdate) {
       const leaderboard = this.getLeaderboard();
-      Object.keys(this.sockets).forEach(playerID => {
-        const socket = this.sockets[playerID];
+      Object.entries(this.sockets).forEach(([playerID, socket]) => {
         const player = this.players[playerID];
-        socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player, leaderboard));
+        const update = this.createUpdate(player, leaderboard);
+        socket.emit(Constants.MSG_TYPES.GAME_UPDATE, update);
       });
       this.shouldSendUpdate = false;
     } else {
@@ -91,19 +104,17 @@ class Game {
   }
 
   getLeaderboard() {
-    return Object.values(this.players)
+    return [...Object.values(this.players), ...Object.values(this.bots)]
       .sort((p1, p2) => p2.score - p1.score)
       .slice(0, 5)
-      .map(p => ({ username: p.username, score: Math.round(p.score) }));
+      .map(p => ({ username: p.username || 'Unnamed', score: Math.round(p.score) }));
   }
 
   createUpdate(player, leaderboard) {
-    const nearbyPlayers = Object.values(this.players).filter(
-      p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2,
-    );
-    const nearbyBullets = this.bullets.filter(
-      b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
-    );
+    const nearbyPlayers = [...Object.values(this.players), ...Object.values(this.bots)]
+      .filter(p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2);
+    
+    const nearbyBullets = this.bullets.filter(b => b.distanceTo(player) <= Constants.MAP_SIZE / 2);
 
     return {
       t: Date.now(),

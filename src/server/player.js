@@ -11,24 +11,16 @@ class Player extends ObjectClass {
     this.score = 0;
   }
 
-  // Returns a newly created bullet, or null.
   update(dt) {
     super.update(dt);
-
-    // Update score
     this.score += dt * Constants.SCORE_PER_SECOND;
-
-    // Make sure the player stays in bounds
     this.x = Math.max(0, Math.min(Constants.MAP_SIZE, this.x));
     this.y = Math.max(0, Math.min(Constants.MAP_SIZE, this.y));
-
-    // Fire a bullet, if needed
     this.fireCooldown -= dt;
     if (this.fireCooldown <= 0) {
       this.fireCooldown += Constants.PLAYER_FIRE_COOLDOWN;
       return new Bullet(this.id, this.x, this.y, this.direction);
     }
-
     return null;
   }
 
@@ -45,6 +37,7 @@ class Player extends ObjectClass {
       ...(super.serializeForUpdate()),
       direction: this.direction,
       hp: this.hp,
+      username: this.username,
     };
   }
 }

@@ -8,13 +8,7 @@
   <meta property="og:title" content="PUMP PVP">
   <meta property="og:description" content="Pump PvP Built with Javascript and Node.js. Open source on Github.">
   <meta property="og:image" content="/assets/icon1200.png">
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-58664433-3');
-  </script>
+  <link href="game.2b5e14ca6756afccbd43.css" rel="stylesheet"></head>
 </head>
 <body>
   <iframe id="shaderBackground" src="https://www.shadertoy.com/embed/WfSGWR?gui=false&paused=false&muted=false" allowfullscreen></iframe>
@@ -31,9 +25,9 @@
       <!-- <br /> -->
       CA:</a>.
       <br />
-      See the source code on <a href="https://github.com/trenchespvp/pumpgame" target="_blank">Github</a>.
+      See the source code on <a href="https://github.com/bruztee/pumpgame" target="_blank">Github</a>.
       <br />
-      Visit our X <a href="https://x.com/pumppvpgame">PUMP PVP</a>.
+      Visit our X <a href="https://x.com/pumppvp">PUMP PVP</a>.
     </p>
     <hr />
     <input type="text" id="username-input" placeholder="Username" />
@@ -60,10 +54,12 @@
     </div>
   </div>
   <!-- Добавьте в конец body в index.html -->
-<div id="chat-container" class="hidden">
-  <div id="chat-box" style="height: 200px; overflow-y: auto; background: rgba(0, 0, 0, 0.7); color: white; padding: 10px;"></div>
-  <input type="text" id="chat-input" placeholder="Type a message..." style="width: 700px; padding: 5px; margin-top: 10px;">
-  <button id="send-chat-button">Send</button>
-</div>
+  <div id="chat-container" class="hidden" style="width: 100%; max-width: 800px;">
+    <div id="chat-box" style="height: 200px; overflow-y: auto; background: rgba(0, 0, 0, 0.7); color: white; padding: 10px;"></div>
+    <div style="display: flex; align-items: center; width: 100%; margin-top: 10px;">
+      <input type="text" id="chat-input" placeholder="Type a message..." style="flex-grow: 1; padding: 5px; background: rgba(0, 0, 0, 0.7); border: 1px solid #ccc; color: white;">
+      <button id="send-chat-button" style="padding: 5px 10px; background: rgba(0, 0, 0, 0.7); border: 1px solid #ccc; color: white;">Send</button>
+    </div>
+  </div>
 </body>
 </html>
