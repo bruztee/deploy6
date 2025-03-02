@@ -22,13 +22,15 @@ const server = app.listen(port);
 console.log(`Server listening on port ${port}`);
 
 const io = socketio(server);
-const chatHistory = []; // Храним историю чата
+const chatHistory = [];
+const game = new Game(io); // Передаём io в Game
 
 io.on('connection', socket => {
   console.log('Player connected!', socket.id);
 
-  // Отправляем историю чата новому пользователю
+  // Отправляем историю чата и топ-10 новому пользователю
   socket.emit('chatHistory', chatHistory);
+  socket.emit('allTimeLeaderboard', game.getAllTimeLeaderboard());
 
   socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
   socket.on(Constants.MSG_TYPES.INPUT, handleInput);
@@ -41,12 +43,8 @@ io.on('connection', socket => {
         username: data.username,
         message: data.message.substr(0, 100),
       };
-
-      // Добавляем сообщение в историю
       chatHistory.push(chatMsg);
-      if (chatHistory.length > 50) chatHistory.shift(); // Ограничиваем до 50 сообщений
-
-      // Отправляем сообщение всем пользователям
+      if (chatHistory.length > 50) chatHistory.shift();
       io.emit('chatMessage', chatMsg);
       console.log('Broadcasting chat message:', chatMsg);
     } else {
@@ -55,9 +53,20 @@ io.on('connection', socket => {
   });
 });
 
-const game = new Game();
-
 function joinGame(username) {
+  if (typeof username !== 'string') return;
+
+  username = username.trim(); // Убираем пробелы в начале и конце
+
+  if (username.length === 0) {
+    this.emit('errorMessage', 'Username cannot be empty'); // Можно отправить ошибку клиенту
+    return;
+  }
+
+  if (username.length > 10) {
+    username = username.substring(0, 10); // Обрезаем до 10 символов
+  }
+
   game.addPlayer(this, username);
 }
 

@@ -61,9 +61,9 @@ iframe {
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
   padding: 20px 30px;
-  background: rgba(0, 0, 0, 0.7); /* Тёмный фон как у чата */
-  border: 1px solid #ccc; /* Граница как у чата */
-  color: white; /* Белый текст */
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #ccc;
+  color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,19 +74,19 @@ iframe {
 
 #play-menu p {
   margin-bottom: 0;
-  color: white; /* Убедимся, что текст белый */
+  color: white;
 }
 
 #play-menu input {
   font-size: 18px;
   outline: none;
   border: none;
-  border-bottom: 1px solid #ccc; /* Серая линия как у чата */
+  border-bottom: 1px solid #ccc;
   margin-bottom: 5px;
   padding: 3px;
   text-align: center;
-  background: rgba(0, 0, 0, 0.7); /* Тёмный фон для инпута */
-  color: white; /* Белый текст в инпуте */
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
 }
 
 #play-menu input:hover {
@@ -96,78 +96,75 @@ iframe {
 #play-menu button {
   font-size: 18px;
   outline: none;
-  border: 1px solid #ccc; /* Граница как у чата */
-  color: white; /* Белый текст */
-  background: rgba(0, 0, 0, 0.7); /* Тёмный фон */
+  border: 1px solid #ccc;
+  color: white;
+  background: rgba(0, 0, 0, 0.7);
   padding: 5px 20px;
   border-radius: 3px;
   transition: background-color 0.2s ease;
 }
 
 #play-menu button:hover {
-  background-color: rgba(50, 50, 50, 0.7); /* Лёгкое осветление при наведении */
+  background-color: rgba(50, 50, 50, 0.7);
 }
 
-/* Стили для лидерборда */
+/* Стили для обычного лидерборда (справа) */
 #leaderboard {
   position: fixed;
   top: 10px;
   right: 10px;
-  background: rgba(0, 0, 0, 0.7); /* Тёмный фон как у чата */
+  background: rgba(0, 0, 0, 0.7);
   padding: 10px;
-  border: 1px solid #ccc; /* Граница как у чата */
+  border: 1px solid #ccc;
   border-radius: 5px;
-  color: white; /* Белый текст */
+  color: white;
+  width: 175px;
   box-sizing: border-box;
 }
 
 #leaderboard th {
   text-align: center;
   padding: 2px 5px;
-  color: white; /* Белый текст для заголовков */
+  color: white;
 }
 
 #leaderboard td {
   text-align: center;
   padding: 2px 5px;
-  color: white; /* Белый текст для ячеек */
+  color: white;
 }
 
-/* Общие стили */
-hr {
-  border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Светлая линия для тёмного фона */
-  margin: 1rem 0;
-  width: 100%;
+/* Стили для топ-10 лидерборда (слева) */
+#all-time-leaderboard {
+  position: fixed;
+  top: 10px;
+  left: 10px; /* Перемещаем в левый верхний угол */
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  width: 175px;
+  box-sizing: border-box;
+  z-index: 10; /* Убедимся, что он выше фона */
 }
 
-button {
+#all-time-leaderboard h3 {
+  margin: 0 0 10px 0;
+  text-align: center;
   font-size: 18px;
-  outline: none;
-  border: none;
-  color: white; /* Белый текст по умолчанию */
-  background-color: transparent;
-  padding: 5px 20px;
-  border-radius: 3px;
-  transition: background-color 0.2s ease;
 }
 
-button:hover {
-  background-color: rgba(50, 50, 50, 0.7); /* Лёгкое осветление при наведении */
+#all-time-leaderboard th {
+  text-align: center;
+  padding: 2px 5px;
+  color: white;
 }
 
-button:focus {
-  outline: none;
-}
-
-.hidden {
-  display: none !important;
-}
-
-#game-canvas {
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+#all-time-leaderboard td {
+  text-align: center;
+  padding: 2px 5px;
+  color: white;
 }
 
 /* Стили для модального окна отключения */
@@ -186,11 +183,48 @@ button:focus {
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
   padding: 15px 20px;
-  background: rgba(0, 0, 0, 0.7); /* Тёмный фон как у чата */
-  border: 1px solid #ccc; /* Граница как у чата */
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #ccc;
   border-radius: 5px;
   text-align: center;
-  color: white; /* Белый текст */
+  color: white;
+}
+
+/* Общие стили */
+hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 1rem 0;
+  width: 100%;
+}
+
+button {
+  font-size: 18px;
+  outline: none;
+  border: none;
+  color: white;
+  background-color: transparent;
+  padding: 5px 20px;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: rgba(50, 50, 50, 0.7);
+}
+
+button:focus {
+  outline: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+#game-canvas {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
 /* Медиазапросы для мобильных устройств */
@@ -220,6 +254,13 @@ button:focus {
     width: 90%;
     max-width: 300px;
     right: 5px;
+    top: 5px;
+  }
+
+  #all-time-leaderboard {
+    width: 90%;
+    max-width: 300px;
+    left: 5px; /* Мобильная адаптация */
     top: 5px;
   }
 }
@@ -272,6 +313,12 @@ button:focus {
   }
 
   #leaderboard td {
+    padding: 0 3px;
+    font-size: 14px;
+  }
+
+  #all-time-leaderboard th,
+  #all-time-leaderboard td {
     padding: 0 3px;
     font-size: 14px;
   }

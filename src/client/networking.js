@@ -31,6 +31,10 @@ export const connect = onGameOver => (
       displayChatMessage(data);
       scrollChatToBottom();
     });
+    socket.on('allTimeLeaderboard', (top10) => {
+      //console.log('Received all-time leaderboard:', top10);
+      updateAllTimeLeaderboard(top10);
+    });
   }).catch(error => console.error('Error in connect promise:', error))
 );
 
@@ -84,3 +88,19 @@ export const updateDirection = throttle(20, dir => {
   }
   socket.emit(Constants.MSG_TYPES.INPUT, dir);
 });
+
+export function updateAllTimeLeaderboard(top10) {
+  const allTimeLeaderboard = document.getElementById('all-time-leaderboard');
+  if (!allTimeLeaderboard) {
+    console.error('⚠️ #all-time-leaderboard not found in DOM');
+    return;
+  }
+  const rows = allTimeLeaderboard.querySelectorAll('table tr');
+  for (let i = 0; i < 10; i++) {
+    if (i < top10.length) {
+      rows[i + 1].innerHTML = `<td>${top10[i].username.slice(0, 15)}</td><td>${top10[i].score}</td>`;
+    } else {
+      rows[i + 1].innerHTML = '<td>-</td><td>-</td>';
+    }
+  }
+}
