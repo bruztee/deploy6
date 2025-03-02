@@ -1,23 +1,26 @@
 const Constants = require('../shared/constants');
 const Player = require('./player');
+const Bullet = require('./bullet');
 const applyCollisions = require('./collisions');
 
 class Game {
-  constructor() {
+  constructor(io) {
+    this.io = io;
     this.sockets = {};
     this.players = {};
     this.bullets = [];
     this.bots = {};
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
+    this.allTimeLeaderboard = [];
     setInterval(this.update.bind(this), 1000 / 60);
 
-    this.addBot("johnyboy");
-    this.addBot("sadsa");
-    this.addBot("xmll");
-    this.addBot("рускиеесть?");
-    this.addBot("x.com/pumppvp");
-    this.addBot("sssah");
+    this.addBot("Bot_1");
+    this.addBot("Bot_2");
+    this.addBot("Bot_3");
+    this.addBot("Bot_4");
+    this.addBot("Bot_5");
+    this.addBot("Bot_6");
   }
 
   addPlayer(socket, username) {
@@ -25,6 +28,8 @@ class Game {
     const x = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
     const y = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
     this.players[socket.id] = new Player(socket.id, username, x, y);
+    socket.emit('allTimeLeaderboard', this.getAllTimeLeaderboard());
+    console.log(`Player ${socket.id} added with username: ${username}`);
   }
 
   addBot(botName) {
@@ -36,6 +41,14 @@ class Game {
   }
 
   removePlayer(socket) {
+    const player = this.players[socket.id];
+    if (player) {
+      console.log(`Removing player ${socket.id} with score ${player.score}`);
+      this.updateAllTimeLeaderboard(player.username, Math.round(player.score));
+      this.io.sockets.emit('allTimeLeaderboard', this.getAllTimeLeaderboard());
+    } else {
+      console.log(`Player ${socket.id} not found in players list`);
+    }
     delete this.sockets[socket.id];
     delete this.players[socket.id];
   }
@@ -43,6 +56,12 @@ class Game {
   handleInput(socket, dir) {
     if (this.players[socket.id]) {
       this.players[socket.id].setDirection(dir);
+    }
+  }
+
+  handleShooting(socket, isShooting) {
+    if (this.players[socket.id]) {
+      this.players[socket.id].setShooting(isShooting);
     }
   }
 
@@ -81,8 +100,9 @@ class Game {
 
     Object.entries(this.players).forEach(([playerID, player]) => {
       if (player.hp <= 0) {
-        // Отправляем GAME_OVER с финальным счетом игрока
+        console.log(`Player ${playerID} (${player.username}) died with score ${player.score}`);
         this.sockets[playerID].emit(Constants.MSG_TYPES.GAME_OVER, {
+          username: player.username, // Теперь передаём имя игрока
           score: Math.round(player.score),
         });
         this.removePlayer(this.sockets[playerID]);
@@ -91,6 +111,9 @@ class Game {
 
     Object.entries(this.bots).forEach(([botID, bot]) => {
       if (bot.hp <= 0) {
+        console.log(`Bot ${botID} died with score ${bot.score}`);
+        this.updateAllTimeLeaderboard(bot.username, Math.round(bot.score)); // Добавляем бота в топ-10
+        this.io.sockets.emit('allTimeLeaderboard', this.getAllTimeLeaderboard()); // Рассылаем обновлённый топ-10
         bot.hp = Constants.PLAYER_MAX_HP;
         bot.x = Constants.MAP_SIZE * Math.random();
         bot.y = Constants.MAP_SIZE * Math.random();
@@ -102,8 +125,10 @@ class Game {
       const leaderboard = this.getLeaderboard();
       Object.entries(this.sockets).forEach(([playerID, socket]) => {
         const player = this.players[playerID];
-        const update = this.createUpdate(player, leaderboard);
-        socket.emit(Constants.MSG_TYPES.GAME_UPDATE, update);
+        if (player) {
+          const update = this.createUpdate(player, leaderboard);
+          socket.emit(Constants.MSG_TYPES.GAME_UPDATE, update);
+        }
       });
       this.shouldSendUpdate = false;
     } else {
@@ -121,7 +146,6 @@ class Game {
   createUpdate(player, leaderboard) {
     const nearbyPlayers = [...Object.values(this.players), ...Object.values(this.bots)]
       .filter(p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2);
-    
     const nearbyBullets = this.bullets.filter(b => b.distanceTo(player) <= Constants.MAP_SIZE / 2);
 
     return {
@@ -132,6 +156,26 @@ class Game {
       leaderboard,
       myScore: Math.round(player.score),
     };
+  }
+
+  updateAllTimeLeaderboard(username, score) {
+    const existingEntry = this.allTimeLeaderboard.find(entry => entry.username === username);
+    if (existingEntry) {
+      if (score > existingEntry.score) {
+        existingEntry.score = score;
+      }
+    } else {
+      this.allTimeLeaderboard.push({ username, score });
+    }
+    this.allTimeLeaderboard.sort((a, b) => b.score - a.score);
+    if (this.allTimeLeaderboard.length > 10) {
+      this.allTimeLeaderboard.length = 10;
+    }
+    console.log('Updated all-time leaderboard:', this.allTimeLeaderboard);
+  }
+
+  getAllTimeLeaderboard() {
+    return this.allTimeLeaderboard.slice(0, 10);
   }
 }
 

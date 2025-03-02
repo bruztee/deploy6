@@ -8,7 +8,7 @@
   <meta property="og:title" content="PUMP PVP">
   <meta property="og:description" content="Pump PvP Built with Javascript and Node.js. Open source on Github.">
   <meta property="og:image" content="/assets/icon1200.png">
-  <link href="game.2b5e14ca6756afccbd43.css" rel="stylesheet"></head>
+  <link href="game.2b5e14ca6756afccbd43.css" rel="stylesheet">
 </head>
 <body>
   <iframe id="shaderBackground" src="https://www.shadertoy.com/embed/WfSGWR?gui=false&paused=false&muted=false" allowfullscreen></iframe>
@@ -22,15 +22,14 @@
     </p>
     <hr />
     <p>
-      <!-- <br /> -->
-      CA:</a>.
+      CA:</a><a href="https://x.com/pumppvp"> Not Yet</a>
       <br />
-      See the source code on <a href="https://github.com/bruztee/pumpgame" target="_blank">Github</a>.
+      Claim  <a href="https://pumppvp.gitbook.io/pump-pvp-pumppvp.xyz" target="_blank">airdrop</a>
       <br />
-      Visit our X <a href="https://x.com/pumppvp">PUMP PVP</a>.
+      Visit our X <a href="https://x.com/pumppvp">PUMP PVP</a>
     </p>
     <hr />
-    <input type="text" id="username-input" placeholder="Username" />
+    <input type="text" id="username-input" placeholder="Username" maxlength="10" />
     <button id="play-button">PLAY</button>
   </div>
   <div id="leaderboard" class="hidden">
@@ -46,15 +45,31 @@
       <tr><td></td><td></td></tr>
     </table>
   </div>
+  <div id="all-time-leaderboard" class="hidden">
+    <h3>All-Time Top 10</h3>
+    <table>
+      <tr><th>Username</th><th>Score</th></tr>
+      <tr><td>-</td><td>-</td></tr>
+      <tr><td>-</td><td>-</td></tr>
+      <tr><td>-</td><td>-</td></tr>
+      <tr><td>-</td><td>-</td></tr>
+      <tr><td>-</td><td>-</td></tr>
+      <tr><td>-</td><td>-</td></tr>
+      <tr><td>-</td><td>-</td></tr>
+      <tr><td>-</td><td>-</td></tr>
+      <tr><td>-</td><td>-</td></tr>
+      <tr><td>-</td><td>-</td></tr>
+    </table>
+  </div>
   <div id="disconnect-modal" class="hidden">
     <div>
       <h2>You dead!</h2>
-      <p id="final-score"></p> <!-- Элемент для отображения очков -->
+      <p id="dead-username"></p> <!-- Здесь будет отображаться ник -->
+      <p id="final-score"></p>
       <hr />
       <button id="reconnect-button">Play Again</button>
     </div>
   </div>
-  <!-- Добавьте в конец body в index.html -->
   <div id="chat-container" class="hidden" style="width: 100%; max-width: 800px;">
     <div id="chat-box" style="height: 200px; overflow-y: auto; background: rgba(0, 0, 0, 0.7); color: white; padding: 10px;"></div>
     <div style="display: flex; align-items: center; width: 100%; margin-top: 10px;">
@@ -62,5 +77,6 @@
       <button id="send-chat-button" style="padding: 5px 10px; background: rgba(0, 0, 0, 0.7); border: 1px solid #ccc; color: white;">Send</button>
     </div>
   </div>
+  <script type="module" src="/js/index.js"></script>
 </body>
 </html>
