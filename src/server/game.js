@@ -12,8 +12,10 @@ class Game {
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
 
-    this.addBot("Bot_1");
-    this.addBot("Bot_2");
+    this.addBot("jeniffer");
+    this.addBot("ss");
+    this.addBot("x.com/pumppvp");
+    this.addBot("DDx");
   }
 
   addPlayer(socket, username) {
