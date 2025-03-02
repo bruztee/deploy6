@@ -118,7 +118,7 @@ iframe {
   border: 1px solid #ccc;
   border-radius: 5px;
   color: white;
-  width: 175px;
+  width: 250;
   box-sizing: border-box;
 }
 
@@ -144,7 +144,7 @@ iframe {
   padding: 10px;
   border-radius: 5px;
   color: white;
-  width: 175px;
+  width: 250;
   box-sizing: border-box;
   z-index: 10; /* Убедимся, что он выше фона */
 }
