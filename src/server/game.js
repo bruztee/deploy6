@@ -15,12 +15,12 @@ class Game {
     this.allTimeLeaderboard = [];
     setInterval(this.update.bind(this), 1000 / 60);
 
-    this.addBot("Bot_1");
-    this.addBot("Bot_2");
-    this.addBot("Bot_3");
-    this.addBot("Bot_4");
-    this.addBot("Bot_5");
-    this.addBot("Bot_6");
+    this.addBot("joshua");
+    this.addBot("individual");
+    this.addBot("x.com/pumppvp");
+    this.addBot("sadgder");
+    this.addBot("xzkvjo");
+    this.addBot("ssdd");
   }
 
   addPlayer(socket, username) {
