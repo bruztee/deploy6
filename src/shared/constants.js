@@ -4,7 +4,8 @@ module.exports = Object.freeze({
   PLAYER_SPEED: 600,
   PLAYER_FIRE_COOLDOWN: 0.25,
 
-  BULLET_RADIUS: 5,
+  BULLET_RADIUS: 2, // Reduced bullet size to make them more star-like
+
   BULLET_SPEED: 2400,
   BULLET_DAMAGE: 10,
 

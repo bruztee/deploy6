@@ -27,7 +27,7 @@ class Game {
     this.sockets[socket.id] = socket;
     const x = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
     const y = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
-    this.players[socket.id] = new Player(socket.id, username, x, y);
+    this.players[socket.id] = new Player(socket.id, username, x, y, socket); // Pass socket to player
     socket.emit('allTimeLeaderboard', this.getAllTimeLeaderboard());
     console.log(`Player ${socket.id} added with username: ${username}`);
   }
@@ -37,6 +37,8 @@ class Game {
     const x = Constants.MAP_SIZE * Math.random();
     const y = Constants.MAP_SIZE * Math.random();
     const bot = new Player(botID, botName, x, y);
+    // Set the bot's fireCooldown to match player cooldown
+    bot.fireCooldown = Constants.PLAYER_FIRE_COOLDOWN;
     this.bots[botID] = bot;
   }
 
@@ -78,15 +80,20 @@ class Game {
     });
 
     Object.values(this.bots).forEach(bot => {
+      // Randomly change direction occasionally
       if (Math.random() < 0.02) {
         bot.setDirection(Math.random() * Math.PI * 2);
       }
+      
+      // Update bot with the same logic as players
       const newBullet = bot.update(dt);
       if (newBullet) {
         this.bullets.push(newBullet);
-      } else if (Math.random() < 0.03) {
-        bot.fireCooldown = 0;
       }
+      
+      // Bots now use the same firing cooldown as players
+      // No need to reset fireCooldown manually
+      
       if (bot.score > 1500) {
         bot.score = 0;
       }
@@ -102,7 +109,7 @@ class Game {
       if (player.hp <= 0) {
         console.log(`Player ${playerID} (${player.username}) died with score ${player.score}`);
         this.sockets[playerID].emit(Constants.MSG_TYPES.GAME_OVER, {
-          username: player.username, // Теперь передаём имя игрока
+          username: player.username, // Передаём имя игрока
           score: Math.round(player.score),
         });
         this.removePlayer(this.sockets[playerID]);

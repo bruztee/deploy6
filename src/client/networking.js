@@ -32,9 +32,9 @@ export const connect = onGameOver => (
       scrollChatToBottom();
     });
     socket.on('allTimeLeaderboard', (top10) => {
-      //console.log('Received all-time leaderboard:', top10);
       updateAllTimeLeaderboard(top10);
     });
+    
   }).catch(error => console.error('Error in connect promise:', error))
 );
 

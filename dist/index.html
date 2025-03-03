@@ -8,31 +8,43 @@
   <meta property="og:title" content="PUMP PVP">
   <meta property="og:description" content="Pump PvP Built with Javascript and Node.js. Open source on Github.">
   <meta property="og:image" content="/assets/icon1200.png">
-  <link href="game.2b5e14ca6756afccbd43.css" rel="stylesheet">
-<link href="game.f6879317e80fafa5d33e.css" rel="stylesheet"></head>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+<link href="game.e3a70a88e0b5879fa504.css" rel="stylesheet"></head>
 <body>
-  <iframe id="shaderBackground" src="https://www.shadertoy.com/embed/WfSGWR?gui=false&paused=false&muted=false" allowfullscreen></iframe>
+  <div id="shader-container">
+    <iframe id="shaderBackground" src="https://www.shadertoy.com/embed/WfSGWR?gui=false&paused=false&muted=false" allowfullscreen></iframe>
+  </div>
+  
   <canvas id="game-canvas"></canvas>
-  <div id="play-menu" class="hidden">
-    <h1>PUMP PVP</h1>
-    <p>
-      Stay alive and shoot other players.
-      <br />
+  
+  <!-- Main Menu -->
+  <div id="play-menu" class="hidden neo-panel pulse-effect">
+    <iframe id="menu-shader" src="https://www.shadertoy.com/embed/4ddSDS?gui=true&t=10&paused=false&muted=false" allowfullscreen></iframe>
+    <h1 class="neo-title glow-effect">PUMP PVP</h1>
+    <p class="neo-subtitle">
+      Stay alive and shoot other players.<br />
       Use your mouse to move.
     </p>
-    <hr />
-    <p>
-      CA:</a><a href="https://x.com/pumppvp"> Not Yet</a>
-      <br />
-      Claim  <a href="https://pumppvp.gitbook.io/pump-pvp-pumppvp.xyz" target="_blank">airdrop</a>
-      <br />
-      Visit our X <a href="https://x.com/pumppvp">PUMP PVP</a>
-    </p>
-    <hr />
-    <input type="text" id="username-input" placeholder="Username" maxlength="10" />
-    <button id="play-button">PLAY</button>
+    <input type="text" id="username-input" class="neo-input" placeholder="Username" maxlength="10" />
+    <button id="play-button" class="neo-button">PLAY</button>
   </div>
-  <div id="leaderboard" class="hidden">
+  
+  <!-- Social Links Panel -->
+  <div id="social-links" class="hidden neo-panel">
+    <p>
+      CA: <a href="https://x.com/pumppvp" class="neo-link">Not Yet</a>
+    </p>
+    <p>
+      Claim <a href="https://pumppvp.gitbook.io/pump-pvp-pumppvp.xyz" target="_blank" class="neo-link">airdrop</a>
+    </p>
+    <p>
+      Visit our X <a href="https://x.com/pumppvp" class="neo-link">PUMP PVP</a>
+    </p>
+  </div>
+  
+  <!-- Current Game Leaderboard -->
+  <div id="leaderboard" class="hidden neo-panel">
     <table>
       <tr>
         <th>Username</th>
@@ -45,7 +57,9 @@
       <tr><td></td><td></td></tr>
     </table>
   </div>
-  <div id="all-time-leaderboard" class="hidden">
+  
+  <!-- All-Time Leaderboard -->
+  <div id="all-time-leaderboard" class="hidden neo-panel">
     <h3>All-Time Top 10</h3>
     <table>
       <tr><th>Username</th><th>Score</th></tr>
@@ -61,22 +75,26 @@
       <tr><td>-</td><td>-</td></tr>
     </table>
   </div>
+  
+  <!-- Game Over Modal -->
   <div id="disconnect-modal" class="hidden">
-    <div>
+    <div class="neo-panel">
       <h2>You dead!</h2>
-      <p id="dead-username"></p> <!-- Здесь будет отображаться ник -->
       <p id="final-score"></p>
-      <hr />
-      <button id="reconnect-button">Play Again</button>
+      <div class="neo-hr"></div>
+      <button id="reconnect-button" class="neo-button">Play Again</button>
     </div>
   </div>
-  <div id="chat-container" class="hidden" style="width: 100%; max-width: 800px;">
-    <div id="chat-box" style="height: 200px; overflow-y: auto; background: rgba(0, 0, 0, 0.7); color: white; padding: 10px;"></div>
+  
+  <!-- Chat Container -->
+  <div id="chat-container" class="hidden">
+    <div id="chat-box"></div>
     <div style="display: flex; align-items: center; width: 100%; margin-top: 10px;">
-      <input type="text" id="chat-input" placeholder="Type a message..." style="flex-grow: 1; padding: 5px; background: rgba(0, 0, 0, 0.7); border: 1px solid #ccc; color: white;">
-      <button id="send-chat-button" style="padding: 5px 10px; background: rgba(0, 0, 0, 0.7); border: 1px solid #ccc; color: white;">Send</button>
+      <input type="text" id="chat-input" placeholder="Type a message..." class="neo-input" style="margin-bottom: 0;">
+      <button id="send-chat-button" class="neo-button" style="width: auto; margin-left: 10px;">Send</button>
     </div>
   </div>
+  
   <script type="module" src="/js/index.js"></script>
 <script type="text/javascript" src="game.d388ea093131305510db.js"></script></body>
 </html>

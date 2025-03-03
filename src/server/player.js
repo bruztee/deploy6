@@ -3,12 +3,13 @@ const Bullet = require('./bullet');
 const Constants = require('../shared/constants');
 
 class Player extends ObjectClass {
-  constructor(id, username, x, y) {
+  constructor(id, username, x, y, socket = null) {
     super(id, x, y, Math.random() * 2 * Math.PI, Constants.PLAYER_SPEED);
     this.username = username;
     this.hp = Constants.PLAYER_MAX_HP;
     this.fireCooldown = 0;
     this.score = 0;
+    this.socket = socket; // Store socket reference for hit notifications
   }
 
   update(dt) {
@@ -26,6 +27,9 @@ class Player extends ObjectClass {
 
   takeBulletDamage() {
     this.hp -= Constants.BULLET_DAMAGE;
+    
+    // Note: We don't emit the hit sound here anymore
+    // It's now handled in the collisions.js file to avoid duplicate sounds
   }
 
   onDealtDamage() {
