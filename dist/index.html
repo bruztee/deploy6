@@ -10,7 +10,7 @@
   <meta property="og:image" content="/assets/icon1200.png">
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
-<link href="game.e3a70a88e0b5879fa504.css" rel="stylesheet"></head>
+<link href="game.b2ac6b992745ea44311a.css" rel="stylesheet"></head>
 <body>
   <div id="shader-container">
     <iframe id="shaderBackground" src="https://www.shadertoy.com/embed/WfSGWR?gui=false&paused=false&muted=false" allowfullscreen></iframe>
@@ -27,7 +27,11 @@
       Use your mouse to move.
     </p>
     <input type="text" id="username-input" class="neo-input" placeholder="Username" maxlength="10" />
-    <button id="play-button" class="neo-button">PLAY</button>
+    <button id="play-button" class="neo-button">
+      <span class="shine"></span>
+      <span class="edge"></span>
+      PLAY
+    </button>
   </div>
   
   <!-- Social Links Panel -->
@@ -80,9 +84,14 @@
   <div id="disconnect-modal" class="hidden">
     <div class="neo-panel">
       <h2>You dead!</h2>
+      <p id="dead-username"></p>
       <p id="final-score"></p>
       <div class="neo-hr"></div>
-      <button id="reconnect-button" class="neo-button">Play Again</button>
+      <button id="reconnect-button" class="neo-button">
+        <span class="shine"></span>
+        <span class="edge"></span>
+        Play Again
+      </button>
     </div>
   </div>
   
@@ -91,10 +100,14 @@
     <div id="chat-box"></div>
     <div style="display: flex; align-items: center; width: 100%; margin-top: 10px;">
       <input type="text" id="chat-input" placeholder="Type a message..." class="neo-input" style="margin-bottom: 0;">
-      <button id="send-chat-button" class="neo-button" style="width: auto; margin-left: 10px;">Send</button>
+      <button id="send-chat-button" class="neo-button" style="width: auto; margin-left: 10px; margin-top: 0;">
+        <span class="shine"></span>
+        <span class="edge"></span>
+        Send
+      </button>
     </div>
   </div>
   
   <script type="module" src="/js/index.js"></script>
-<script type="text/javascript" src="game.d388ea093131305510db.js"></script></body>
+<script type="text/javascript" src="game.8fac3948479645f03d58.js"></script></body>
 </html>
