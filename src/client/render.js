@@ -24,10 +24,16 @@ function setCanvasDimensions() {
 window.addEventListener('resize', debounce(40, setCanvasDimensions));
 
 let animationFrameRequestId;
+// Store the last game state to continue rendering after death
+let lastGameState = null;
 
 function render() {
   const { me, others, bullets } = getCurrentState();
+  
+  // If we have a current game state, store it for use after death
   if (me) {
+    lastGameState = { me, others, bullets };
+    
     // Draw background
     renderBackground(me.x, me.y);
 
@@ -46,6 +52,28 @@ function render() {
     
     // Draw my player last (on top)
     renderPlayer(me, me, true);
+  } else if (lastGameState) {
+    // If player is dead but we have a last game state, continue rendering the game world
+    // but without the player
+    const { me, others, bullets } = lastGameState;
+    
+    // Draw background
+    renderBackground(me.x, me.y);
+
+    // Draw boundaries
+    context.strokeStyle = 'white';
+    context.lineWidth = 5;
+    context.strokeRect(canvas.width / 2 - me.x, canvas.height / 2 - me.y, MAP_SIZE, MAP_SIZE);
+    
+    // Draw all bullets
+    bullets.forEach(renderBullet.bind(null, me));
+
+    // Draw all other players
+    if (others && Array.isArray(others)) {
+      others.forEach(player => renderPlayer(me, player, false));
+    }
+    
+    // Don't draw the player (they're dead)
   }
 
   // Rerun this render function on the next frame
@@ -708,5 +736,7 @@ export function startRendering() {
 // Replaces game rendering with main menu rendering.
 export function stopRendering() {
   cancelAnimationFrame(animationFrameRequestId);
-  animationFrameRequestId = requestAnimationFrame(renderMainMenu);
+  // Instead of switching to menu rendering, continue with the game rendering
+  // but using the last known game state
+  animationFrameRequestId = requestAnimationFrame(render);
 }

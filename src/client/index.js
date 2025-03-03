@@ -115,7 +115,8 @@ Promise.all([
 
 function onGameOver(data) {
   stopCapturingInput();
-  stopRendering();
+  // We don't call stopRendering() anymore to keep the game background visible
+  // stopRendering();
   setLeaderboardHidden(true);
   document.getElementById('chat-container').classList.add('hidden');
 
